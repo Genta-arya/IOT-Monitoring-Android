@@ -1,0 +1,185 @@
+{
+  "project_info": {
+    "project_number": "907921080567",
+    "firebase_url": "https://smart-medical-box-berbasis-iot-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "smart-medical-box-berbasis-iot",
+    "storage_bucket": "smart-medical-box-berbasis-iot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907921080567:android:b884678ca6c103db3f53f2",
+        "android_client_info": {
+          "package_name": "com.dhikalein.smbc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHCPBRxFUqTPuA6z4MlwuEl06soqY60Mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907921080567:android:fad7c535cf71630a3f53f2",
+        "android_client_info": {
+          "package_name": "com.example.smartmedicinecontainerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHCPBRxFUqTPuA6z4MlwuEl06soqY60Mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907921080567:android:c265c473a8c6e7e13f53f2",
+        "android_client_info": {
+          "package_name": "com.flutterflow.SMCC"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHCPBRxFUqTPuA6z4MlwuEl06soqY60Mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907921080567:android:f94dc8ce74b04bdf3f53f2",
+        "android_client_info": {
+          "package_name": "com.monitoring"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHCPBRxFUqTPuA6z4MlwuEl06soqY60Mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907921080567:android:976e7f8d6864ae703f53f2",
+        "android_client_info": {
+          "package_name": "com.mycompany.smartmedicalcontainercontroller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHCPBRxFUqTPuA6z4MlwuEl06soqY60Mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907921080567:android:8fec9838310b7b633f53f2",
+        "android_client_info": {
+          "package_name": "smartmedical.pillcontainer.dhikalein"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHCPBRxFUqTPuA6z4MlwuEl06soqY60Mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907921080567-mi3vdj6ehcp0nb97v25nbt84789ojnr6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
