@@ -24,13 +24,13 @@ const paths = {
   pillCounter3: '/pillCounter3',
   pillCounter4: '/pillCounter4',
 
-  servos: {
-    root: '/servos',
-    servo1: '/servos/servo1',
-    servo2: '/servos/servo2',
-    servo3: '/servos/servo3',
-    servo4: '/servos/servo4',
-  },
+  
+  
+    servo1: '/servo1',
+    servo2: '/servo2',
+    servo3: '/servo3',
+    servo4: '/servo4',
+
 };
 
 export default paths;

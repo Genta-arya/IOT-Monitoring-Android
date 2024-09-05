@@ -24,6 +24,12 @@ const TimerLayout = () => {
     error: errorAlarm,
   } = useFirebaseData(paths.pillAutomasi.set);
 
+  const {
+    data: currentTime,
+    loading: loadingCurrentTime,
+    error: errorCurrentTime,
+  } = useFirebaseData(paths.currentTime);
+
   const [isPickerVisible, setPickerVisibility] = useState(false);
   const [pickerType, setPickerType] = useState('hour');
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -42,7 +48,7 @@ const TimerLayout = () => {
     setAlarmActive(isAlarmActive);
   }, [isAlarmActive]);
 
-  if (loadingHour || loadingMinute || loadingAlarm) {
+  if (loadingHour || loadingMinute || loadingAlarm || loadingCurrentTime) {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Loading...</Text>
@@ -50,12 +56,11 @@ const TimerLayout = () => {
     );
   }
 
-  if (errorHour || errorMinute || errorAlarm) {
+  if (errorHour || errorMinute || errorAlarm || errorCurrentTime) {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>
-          Error:{' '}
-          {errorHour?.message || errorMinute?.message || errorAlarm?.message}
+          Error: {errorHour?.message || errorMinute?.message || errorAlarm?.message || errorCurrentTime?.message}
         </Text>
       </View>
     );
@@ -96,17 +101,14 @@ const TimerLayout = () => {
 
   return (
     <View style={styles.container}>
+      
       <View style={styles.timerContainer}>
         <TouchableOpacity onPress={() => showDatePicker('hour')}>
-          <Text style={styles.timeText}>{`${
-            hour !== null ? (hour < 10 ? `0${hour}` : hour) : '00'
-          }`}</Text>
+          <Text style={styles.timeText}>{`${hour !== null ? (hour < 10 ? `0${hour}` : hour) : '00'}`}</Text>
         </TouchableOpacity>
         <Text style={styles.colon}>:</Text>
         <TouchableOpacity onPress={() => showDatePicker('minute')}>
-          <Text style={styles.timeText}>{`${
-            minute !== null ? (minute < 10 ? `0${minute}` : minute) : '00'
-          }`}</Text>
+          <Text style={styles.timeText}>{`${minute !== null ? (minute < 10 ? `0${minute}` : minute) : '00'}`}</Text>
         </TouchableOpacity>
       </View>
 
@@ -122,7 +124,7 @@ const TimerLayout = () => {
       )}
 
       <View style={styles.switchContainer}>
-        <Text style={styles.switchLabel}>Alarm</Text>
+        <Text style={styles.switchLabel}>Time set</Text>
         <Switch
           value={alarmActive}
           onValueChange={handleSwitchChange}
@@ -130,6 +132,8 @@ const TimerLayout = () => {
           trackColor={{false: '#767577', true: '#767577'}}
         />
       </View>
+
+     
     </View>
   );
 };
@@ -138,13 +142,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
     alignItems: 'center',
-    backgroundColor: '#FF6347',
+    backgroundColor: '#6283B6',
     padding: 20,
   },
   timerContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 10,
+    width: '75%',
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -153,17 +160,16 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 64,
     fontWeight: 'bold',
-    color: '#FF6347',
+    color: '#6283B6',
   },
   colon: {
     fontSize: 64,
     fontWeight: 'bold',
-    color: '#FF6347',
+    color: '#6283B6',
     marginHorizontal: 10,
   },
   switchContainer: {
     marginTop: 20,
-
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -174,6 +180,19 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
+    color: '#FFFFFF',
+  },
+  currentTimeContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  currentTimeText: {
+    fontSize: 18,
+    color: '#FFFFFF',
+  },
+  currentTimeValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
     color: '#FFFFFF',
   },
 });

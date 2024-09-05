@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,12 @@ import {
   ToastAndroid,
 } from 'react-native';
 import useFirebaseData from '../service/Hook/useFirebase';
-import paths from '../utils/Path';
 import database from '../service/Firebase';
 import Sound from 'react-native-sound';
 import sound_klik from "../Asset/klik.mp3";
+import { initialData } from '../utils/DataObat';
+import paths from '../utils/Path';
 
-// Inisialisasi Sound
 Sound.setCategory('Playback');
 const ringtone = new Sound(sound_klik, Sound.MAIN_BUNDLE, (error) => {
   if (error) {
@@ -24,35 +24,66 @@ const ringtone = new Sound(sound_klik, Sound.MAIN_BUNDLE, (error) => {
 });
 
 const ListObat = () => {
-  const {
-    data: pillCounter1,
-    loading: loading1,
-    error: error1,
-  } = useFirebaseData(paths.pillAutomasi.servo1);
-  const {
-    data: pillCounter2,
-    loading: loading2,
-    error: error2,
-  } = useFirebaseData(paths.pillAutomasi.servo2);
-  const {
-    data: pillCounter3,
-    loading: loading3,
-    error: error3,
-  } = useFirebaseData(paths.pillAutomasi.servo3);
-  const {
-    data: pillCounter4,
-    loading: loading4,
-    error: error4,
-  } = useFirebaseData(paths.pillAutomasi.servo4);
+  const [data, setData] = useState(initialData);
+
+  const { data: pillCounter1, loading: loading1, error: error1 } = useFirebaseData(paths.pillAutomasi.servo1);
+  const { data: pillCounter2, loading: loading2, error: error2 } = useFirebaseData(paths.pillAutomasi.servo2);
+  const { data: pillCounter3, loading: loading3, error: error3 } = useFirebaseData(paths.pillAutomasi.servo3);
+  const { data: pillCounter4, loading: loading4, error: error4 } = useFirebaseData(paths.pillAutomasi.servo4);
+
+  const { data: servo1Status } = useFirebaseData(paths.servo1);
+  const { data: servo2Status } = useFirebaseData(paths.servo2);
+  const { data: servo3Status } = useFirebaseData(paths.servo3);
+  const { data: servo4Status } = useFirebaseData(paths.servo4);
+
+  useEffect(() => {
+    if (!loading1 && !loading2 && !loading3 && !loading4) {
+      setData(prevData => prevData.map(item => {
+        switch (item.path) {
+          case paths.pillAutomasi.servo1:
+            return { ...item, value: pillCounter1 };
+          case paths.pillAutomasi.servo2:
+            return { ...item, value: pillCounter2 };
+          case paths.pillAutomasi.servo3:
+            return { ...item, value: pillCounter3 };
+          case paths.pillAutomasi.servo4:
+            return { ...item, value: pillCounter4 };
+          default:
+            return item;
+        }
+      }));
+    }
+  }, [pillCounter1, pillCounter2, pillCounter3, pillCounter4, loading1, loading2, loading3, loading4]);
+
+  useEffect(() => {
+    setData(prevData => prevData.map(item => {
+      switch (item.serv) {
+        case paths.servo1:
+          return { ...item, servoStatus: servo1Status };
+        case paths.servo2:
+          return { ...item, servoStatus: servo2Status };
+        case paths.servo3:
+          return { ...item, servoStatus: servo3Status };
+        case paths.servo4:
+          return { ...item, servoStatus: servo4Status };
+        default:
+          return item;
+      }
+    }));
+  }, [servo1Status, servo2Status, servo3Status, servo4Status]);
 
   const updatePillCounter = (path, value) => {
     const ref = database.ref(path);
     ref.once('value', snapshot => {
       const currentValue = snapshot.val() || 0;
 
-      // Cek jika nilai saat ini 0 dan value negatif
-      if (currentValue === 0 && value < 0) {
+      if (currentValue + value < 0) {
         ToastAndroid.show('Cannot decrease below 0', ToastAndroid.SHORT);
+        return;
+      }
+
+      if (currentValue + value > 25) {
+        ToastAndroid.show('Cannot exceed maximum value of 25', ToastAndroid.SHORT);
         return;
       }
 
@@ -60,7 +91,6 @@ const ListObat = () => {
         ToastAndroid.show(`Error: ${error.message}`, ToastAndroid.SHORT);
       });
 
-      // Mainkan ringtone
       if (ringtone) {
         ringtone.play((success) => {
           if (success) {
@@ -73,13 +103,12 @@ const ListObat = () => {
     });
   };
 
-  const handleSwitchChange = (path, value) => {
-    const newValue = !value;
-    database.ref(path).set(newValue).catch(error => {
+  const handleSwitchChange = (path, currentStatus) => {
+    const newStatus = !currentStatus;
+    database.ref(path).set(newStatus).catch(error => {
       ToastAndroid.show(`Error: ${error.message}`, ToastAndroid.SHORT);
     });
 
-    // Mainkan ringtone
     if (ringtone) {
       ringtone.play((success) => {
         if (success) {
@@ -91,13 +120,7 @@ const ListObat = () => {
     }
   };
 
-  if (loading1 || loading2 || loading3 || loading4) {
-    return (
-      <View style={styles.card}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
+
 
   if (error1 || error2 || error3 || error4) {
     return (
@@ -113,39 +136,8 @@ const ListObat = () => {
     );
   }
 
-  const data = [
-    {
-      id: '1',
-      label: 'Obat A',
-      value: pillCounter1,
-      path: paths.pillAutomasi.servo1,
-      color: '#FF6347',
-    }, // Merah
-    {
-      id: '2',
-      label: 'Obat B',
-      value: pillCounter2,
-      path: paths.pillAutomasi.servo2,
-      color: '#FFD700',
-    }, // Kuning
-    {
-      id: '3',
-      label: 'Obat C',
-      value: pillCounter3,
-      path: paths.pillAutomasi.servo3,
-      color: '#32CD32',
-    }, // Hijau
-    {
-      id: '4',
-      label: 'Obat D',
-      value: pillCounter4,
-      path: paths.pillAutomasi.servo4,
-      color: '#1E90FF',
-    }, // Biru
-  ];
-
-  const renderItem = ({item}) => (
-    <View style={[styles.card, {backgroundColor: item.color}]}>
+  const renderItem = ({ item }) => (
+    <View style={[styles.card, { backgroundColor: item.color }]}>
       <Text style={styles.label}>{item.label}</Text>
       <View style={styles.quantityContainer}>
         <TouchableOpacity
@@ -159,17 +151,18 @@ const ListObat = () => {
         <TouchableOpacity
           onPress={() => updatePillCounter(item.path, 1)}
           activeOpacity={0.7}
-          style={styles.button}>
+          style={[styles.button, item.value >= 25 && styles.buttonDisabled]}
+          disabled={item.value >= 25}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.switchContainer}>
-     
         <Switch
-          value={!!item.value} // Convert to boolean if necessary
-          onValueChange={() => handleSwitchChange(item.path, item.value)}
-          thumbColor={item.value ? '#FF6347' : '#FFFFFF'}
-          trackColor={{ false: '#767577', true: '#FF6347' }}
+          value={!!item.servoStatus} 
+          onValueChange={() => handleSwitchChange(item.serv, item.servoStatus)}
+          thumbColor={item.servoStatus ? 'yellow' : 'white'}
+          trackColor={{ false: '#767577', true: '#767577' }}
+      
         />
       </View>
     </View>
@@ -191,16 +184,16 @@ const ListObat = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
     padding: 10,
   },
   card: {
     flex: 1,
     margin: 10,
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 30,
     shadowColor: '#000000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 5,
     elevation: 5,
@@ -210,7 +203,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontWeight: '900',
   },
   quantityContainer: {
     flexDirection: 'row',
@@ -219,13 +212,9 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: '900',
     color: '#FFFFFF',
-    marginHorizontal: 20, // Jarak antara tombol dan nilai
-  },
-  buttonContainer: {
-    width: '100%',
-    marginTop: 10,
+    marginHorizontal: 20, 
   },
   button: {
     width: 40,
@@ -246,11 +235,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  switchLabel: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    marginRight: 10,
   },
   buttonDisabled: {
     backgroundColor: '#CCCCCC',
