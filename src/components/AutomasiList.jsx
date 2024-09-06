@@ -1,25 +1,17 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-
-  ActivityIndicator,
-} from 'react-native';
+import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
 import useFirebaseData from '../service/Hook/useFirebase';
 import {initialData} from '../utils/DataObat';
 
 const CircleChart = () => {
- 
   const pillCounters = initialData.map(item => {
-    const {data, loading, error} = useFirebaseData(item.automasi); 
+    const {data, loading, error} = useFirebaseData(item.automasi);
     return {...item, value: data, loading, error};
   });
 
-
   const isLoading = pillCounters.some(item => item.loading);
   const hasError = pillCounters.some(item => item.error);
-
+  const allDataEmpty = pillCounters.every(item => !item.value);
   if (isLoading) {
     return <ActivityIndicator size="large" color="#FF6347" />;
   }
@@ -32,23 +24,27 @@ const CircleChart = () => {
     );
   }
 
-  const total = pillCounters.reduce((sum, item) => sum + (item.value || 0), 0);
-
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Total Obat</Text>
-      <View style={styles.chartContainer}>
-        {pillCounters.map(item => (
-          <View key={item.id} style={styles.valueWrapper}>
-            <View
-              style={[styles.valueContainer, {backgroundColor: item.color}]}>
-              <Text style={styles.valueText}>{item.value}</Text>
-            </View>
+    <>
+      {!allDataEmpty && (
+        <View style={styles.container}>
+          <Text style={styles.title}>Total Obat</Text>
+          <View style={styles.chartContainer}>
+            {pillCounters.map(item => (
+              <View key={item.id} style={styles.valueWrapper}>
+                <View
+                  style={[
+                    styles.valueContainer,
+                    {backgroundColor: item.color},
+                  ]}>
+                  <Text style={styles.valueText}>{item.value}</Text>
+                </View>
+              </View>
+            ))}
           </View>
-        ))}
-      </View>
-    </View>
+        </View>
+      )}
+    </>
   );
 };
 
@@ -60,11 +56,16 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     elevation: 40,
     borderTopRightRadius: 40,
+
     backgroundColor: '#FFF',
   },
   title: {
     fontSize: 20,
-    color: 'black',
+    
+    borderBottomColor: '#D3D3D3',
+    borderBottomWidth: 1,
+    color: 'gray',
+    paddingBottom: 14,
     fontWeight: '900',
     marginBottom: 30,
     marginTop: 10,
@@ -84,14 +85,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
-    width: 60, 
+    width: 60,
     height: 60,
-    borderRadius: 50, 
+    borderRadius: 10,
     marginBottom: 10,
   },
   valueText: {
-    color: '#FF6347',
-    backgroundColor: 'white',
+    color: 'white',
+  fontSize: 30,
     padding: 10,
     borderRadius: 100,
     fontWeight: '900',

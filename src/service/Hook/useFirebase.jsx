@@ -37,7 +37,7 @@ const useFirebaseData = path => {
       if (data === null) {
         setConnectionError(true);
       }
-      console.log(data);
+    
    
 
     const onError = error => {

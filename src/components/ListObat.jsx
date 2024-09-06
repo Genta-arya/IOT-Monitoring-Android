@@ -124,40 +124,49 @@ const ListObat = () => {
 
 
 
-  const renderItem = ({ item }) => (
-    <View style={[styles.card, { backgroundColor: item.color }]}>
-      <Text style={styles.label}>{item.label}</Text>
-      <View style={styles.quantityContainer}>
-        <TouchableOpacity
-          onPress={() => updatePillCounter(item.path, -1)}
-          activeOpacity={0.7}
-          style={[styles.button, item.value <= 0 && styles.buttonDisabled]}
-          disabled={item.value <= 0}>
-          <Text style={styles.buttonText}>-</Text>
-        </TouchableOpacity>
-        <Text style={styles.value}>{item.value || '0'}</Text>
-        <TouchableOpacity
-          onPress={() => updatePillCounter(item.path, 1)}
-          activeOpacity={0.7}
-          style={[styles.button, item.value >= 25 && styles.buttonDisabled]}
-          disabled={item.value >= 25}>
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
+  const renderItem = ({item}) => {
+    if (item.value === undefined || item.value === null) {
+      return null; 
+    }
+    return (
+      <View style={[styles.card, {backgroundColor: item.color}]}>
+        <Text style={styles.label}>{item.label}</Text>
+        <View style={styles.quantityContainer}>
+          <TouchableOpacity
+            onPress={() => updatePillCounter(item.path, -1)}
+            activeOpacity={0.7}
+            style={[styles.button, item.value <= 0 && styles.buttonDisabled]}
+            disabled={item.value <= 0}>
+            <Text style={styles.buttonText}>-</Text>
+          </TouchableOpacity>
+          <Text style={styles.value}>{item.value || '0'}</Text>
+          <TouchableOpacity
+            onPress={() => updatePillCounter(item.path, 1)}
+            activeOpacity={0.7}
+            style={[styles.button, item.value >= 25 && styles.buttonDisabled]}
+            disabled={item.value >= 25}>
+            <Text style={styles.buttonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.switchContainer}>
+          <Switch
+            value={!!item.servoStatus}
+            onValueChange={() =>
+              handleSwitchChange(item.serv, item.servoStatus)
+            }
+            thumbColor={item.servoStatus ? 'yellow' : 'white'}
+            trackColor={{false: '#767577', true: '#767577'}}
+          />
+        </View>
       </View>
-      <View style={styles.switchContainer}>
-        <Switch
-          value={!!item.servoStatus} 
-          onValueChange={() => handleSwitchChange(item.serv, item.servoStatus)}
-          thumbColor={item.servoStatus ? 'yellow' : 'white'}
-          trackColor={{ false: '#767577', true: '#767577' }}
-      
-        />
-      </View>
-    </View>
-  );
+    );
+  };
+    
+  
 
   return (
     <View style={styles.container}>
+      
       <FlatList
         data={data}
         renderItem={renderItem}

@@ -26,10 +26,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white', // Background color for the loading screen
+    backgroundColor: 'white', 
   },
   animation: {
     width: "100%",
-    height: "100%", // Adjust size of animation as needed
+    height: "100%",
   },
 });

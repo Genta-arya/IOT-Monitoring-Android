@@ -7,6 +7,7 @@ import {
   Image,
   StatusBar,
   SafeAreaView,
+  RefreshControl,
 } from 'react-native';
 import Temperature from './src/components/Temperature';
 import ListObat from './src/components/ListObat';
@@ -68,10 +69,13 @@ const App = () => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.flatListContent}
-            
-         
-            onRefresh={reload}
-            refreshing={loading} 
+            refreshControl={
+              <RefreshControl 
+                refreshing={loading} 
+                onRefresh={reload} 
+                colors={['#6283B6']}
+              />
+            }
           />
         </View>
       </SafeAreaView>
