@@ -122,19 +122,7 @@ const ListObat = () => {
 
 
 
-  if (error1 || error2 || error3 || error4) {
-    return (
-      <View style={styles.card}>
-        <Text>
-          Error:{' '}
-          {error1?.message ||
-            error2?.message ||
-            error3?.message ||
-            error4?.message}
-        </Text>
-      </View>
-    );
-  }
+
 
   const renderItem = ({ item }) => (
     <View style={[styles.card, { backgroundColor: item.color }]}>

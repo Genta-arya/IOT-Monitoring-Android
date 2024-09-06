@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import paths from '../utils/Path';
 import useFirebaseData from '../service/Hook/useFirebase';
 import iconSuhu from '../Asset/suhu.png'; // Update dengan nama file ikon suhu Anda
@@ -12,45 +12,37 @@ const Temperature = () => {
     error,
   } = useFirebaseData(paths.environment.root);
 
- 
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.card}>
-          <Text style={styles.errorText}>Error: {error.message}</Text>
-        </View>
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.temperatureContainer}>
-          <Image source={iconSuhu} style={styles.icon} />
-          <View style={styles.textContainer}>
-            <Text style={styles.label}>Suhu</Text>
-            <Text style={styles.temperatureValue}>
-              {environmentData
-                ? `${environmentData.temperature}°C`
-                : 'No data available'}
-            </Text>
+    <>
+      {environmentData?.temperature && environmentData?.humidity && (
+        <View style={styles.container}>
+          <View style={styles.card}>
+            <View style={styles.temperatureContainer}>
+              <Image source={iconSuhu} style={styles.icon} />
+              <View style={styles.textContainer}>
+                <Text style={styles.label}>Suhu</Text>
+                <Text style={styles.temperatureValue}>
+                  {environmentData
+                    ? `${environmentData.temperature}°C`
+                    : 'No data available'}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.humidityContainer}>
+              <Image source={iconKelembapan} style={styles.icon} />
+              <View style={styles.textContainer}>
+                <Text style={styles.labelhumidity}>Kelembapan</Text>
+                <Text style={styles.humidityValue}>
+                  {environmentData
+                    ? `${environmentData.humidity}%`
+                    : 'No data available'}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
-        <View style={styles.humidityContainer}>
-          <Image source={iconKelembapan} style={styles.icon} />
-          <View style={styles.textContainer}>
-            <Text style={styles.labelhumidity}>Kelembapan</Text>
-            <Text style={styles.humidityValue}>
-              {environmentData
-                ? `${environmentData.humidity}%`
-                : 'No data available'}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </View>
+      )}
+    </>
   );
 };
 
@@ -67,7 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
     shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
@@ -94,7 +86,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 50,
-   
+
     marginRight: 10,
   },
   textContainer: {

@@ -1,44 +1,61 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import database from '../Firebase';
 import useLoading from '../../utils/Zustand';
-import { set } from '@react-native-firebase/database';
 
-const useFirebaseData = (path) => {
+const useFirebaseData = path => {
   const [data, setData] = useState(null);
-  const { loading, setLoading } = useLoading(); 
+  const {loading, setLoading} = useLoading();
   const [error, setError] = useState(null);
+  const [connectionError, setConnectionError] = useState(null);
+  const [reloadTrigger, setReloadTrigger] = useState(0); // untuk trigger reload
+
+  const reload = useCallback(() => {
+    setLoading(true);
+    setData(null);
+    setReloadTrigger(prev => prev + 1);
+  }, []);
 
   useEffect(() => {
-   
-    setTimeout(() => {
+    const connectionTimeout = setTimeout(() => {
+      if (data === null) {
+        setConnectionError(true);
+      }
       setLoading(false);
     }, 2000);
 
     const reference = database.ref(path);
 
-    const onValueChange = (snapshot) => {
-      setData(snapshot.val());
-      
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000); // 1000 milliseconds = 1 second
-    };
+    const onValueChange = snapshot => {
+    
+        setData(snapshot.val());
 
-    const onError = (error) => {
-      setError(error);
-      // Add a delay of 1 second before setting loading to false
-      setTimeout(() => {
         setLoading(false);
-      }, 1000); // 1000 milliseconds = 1 second
+        setConnectionError(false);
+        clearTimeout(connectionTimeout);
+      } 
+
+      if (data === null) {
+        setConnectionError(true);
+      }
+      console.log(data);
+   
+
+    const onError = error => {
+      console.log(error);
+      setError(error);
+      setLoading(false);
+      clearTimeout(connectionTimeout);
     };
 
     reference.on('value', onValueChange, onError);
 
-    // Cleanup listener on unmount
-    return () => reference.off('value', onValueChange);
-  }, [path, setLoading]); // Add setLoading as a dependency
+    return () => {
+      reference.off('value', onValueChange);
+      clearTimeout(connectionTimeout);
+    };
+  }, [path, reloadTrigger]);
 
-  return { data, loading, error };
+  return {data, loading, error, connectionError, reload};
 };
 
 export default useFirebaseData;

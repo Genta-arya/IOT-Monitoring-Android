@@ -16,20 +16,27 @@ import icon from './src/Asset/icon.png';
 import useLoading from './src/utils/Zustand';
 import Loading from './src/components/Loading';
 import useFirebaseData from './src/service/Hook/useFirebase';
+import ErrorConnection from './src/components/ErrorConnection';
+
 const App = () => {
-  const { loading } = useLoading()
-  const {} = useFirebaseData()
- 
+  const { loading, reload, connectionError , data:datas } = useFirebaseData();
+
   const data = [
-    {id: '1', component: <TimerLayout />},
-    {id: '2', component: <Temperature />},
-    {id: '4', component: <AutomasiList />},
-    {id: '3', component: <ListObat />},
+    { id: '1', component: <TimerLayout /> },
+    { id: '2', component: <Temperature /> },
+    { id: '4', component: <AutomasiList /> },
+    { id: '3', component: <ListObat /> },
   ];
 
-  const renderItem = ({item}) => item.component;
+  const renderItem = ({ item }) => item.component;
 
-  if (loading) return <Loading />;
+  if (connectionError ) {
+    return <ErrorConnection error={connectionError} loading={loading} onReload={reload} />;
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -39,9 +46,14 @@ const App = () => {
           <FlatList
             ListHeaderComponent={
               <View style={styles.header}>
-                <View style={{alignItems: 'flex-start', flexDirection: 'row',gap: 10}}>
+                <View
+                  style={{
+                    alignItems: 'flex-start',
+                    flexDirection: 'row',
+                    gap: 10,
+                  }}>
                   <View>
-                    <Image source={icon} style={{width: 50, height: 50}} />
+                    <Image source={icon} style={{ width: 50, height: 50 }} />
                   </View>
                   <View>
                     <Text style={styles.appTitle}>SMCC APP</Text>
@@ -54,8 +66,12 @@ const App = () => {
             }
             data={data}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
             contentContainerStyle={styles.flatListContent}
+            
+         
+            onRefresh={reload}
+            refreshing={loading} 
           />
         </View>
       </SafeAreaView>
@@ -77,19 +93,18 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 20,
     backgroundColor: '#6283B6',
-    alignItems: 'flex-start', // Menyusun item di sebelah kiri
+    alignItems: 'flex-start', 
   },
   appTitle: {
     fontSize: 32,
     fontWeight: '900',
     color: '#FFFFFF',
-    textAlign: 'left', // Teks judul di kiri
-   
+    textAlign: 'left', 
   },
   subtitle: {
     fontSize: 12,
     fontWeight: '600',
     color: '#FFFFFF',
-    textAlign: 'left', // Teks subtitle di kiri
+    textAlign: 'left', 
   },
 });

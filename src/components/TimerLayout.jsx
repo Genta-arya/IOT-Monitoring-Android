@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Switch} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Switch, ToastAndroid} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import useFirebaseData from '../service/Hook/useFirebase';
 import database from '../service/Firebase';
@@ -97,6 +97,7 @@ const TimerLayout = () => {
     const newValue = !alarmActive;
     setAlarmActive(newValue);
     database.ref(paths.pillAutomasi.set).set(newValue);
+    ToastAndroid.show(`Alarm ${newValue ? 'Time set On' : 'Time set off'}`, ToastAndroid.SHORT);
   };
 
   return (

@@ -3,20 +3,20 @@ import {
   StyleSheet,
   View,
   Text,
-  Dimensions,
+
   ActivityIndicator,
 } from 'react-native';
 import useFirebaseData from '../service/Hook/useFirebase';
 import {initialData} from '../utils/DataObat';
 
 const CircleChart = () => {
-  // Mengambil data pill counter menggunakan custom hook berdasarkan initialData
+ 
   const pillCounters = initialData.map(item => {
-    const {data, loading, error} = useFirebaseData(item.automasi); // Perbaiki path
+    const {data, loading, error} = useFirebaseData(item.automasi); 
     return {...item, value: data, loading, error};
   });
 
-  // Cek apakah ada data yang masih loading
+
   const isLoading = pillCounters.some(item => item.loading);
   const hasError = pillCounters.some(item => item.error);
 
@@ -34,9 +34,6 @@ const CircleChart = () => {
 
   const total = pillCounters.reduce((sum, item) => sum + (item.value || 0), 0);
 
-  const getValueSize = value => {
-    return ((value || 0) / total) * 100; // Persentase ukuran nilai
-  };
 
   return (
     <View style={styles.container}>
@@ -87,9 +84,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
-    width: 60, // Ukuran tetap untuk nilai
-    height: 60, // Ukuran tetap untuk nilai
-    borderRadius: 50, // Membuat bentuk bulat
+    width: 60, 
+    height: 60,
+    borderRadius: 50, 
     marginBottom: 10,
   },
   valueText: {
